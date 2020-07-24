@@ -2,11 +2,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+ <title>My first Angular App</title>
 </head>
-<body>
-    <p>Angular JS - 18/07/2020
-        Hello Coursera 
-    </p>
+<body ng-app="myapp">
+<h1>Img Control</h1>
+<div ng-controller="imgcontrol">
+
+<button ng-click="changejason()">Jason</button> <br>
+<img ng-src="jason_{{mindofjason}}.jpg" width="250" height="250">
+</div>
+
+
+
 </body>
+<script>
+
+(function () {
+    
+
+'use strict'
+
+var app=angular.module('myapp',[])
+app.controller('imgcontrol',imgcontrol);
+imgcontrol.$inject=["$scope"];
+
+function imgcontrol($scope) {
+    $scope.mindofjason="happy";    
+    
+    $scope.changejason=function (){
+        $scope.mindofjason="angry";
+        
+    };
+    
+
+}
+})  ();  
+
+
+
+
+
+// var app=angular.module('myapp',[])
+// app.controller('mycontrol',mycontrol)
+// mycontrol.$inject=["$scope"];
+// function mycontrol($scope)
+// {
+//     $scope.name="Tanmay";
+
+//     $scope.msg=function ()
+//     {
+//      return "Tanmay is Fine";   
+//     };
+// }
+
+// var app=angular.module('myapp',[])
+// app.controller('mycontrol',function ($scope) {
+//    $scope.name=""
+//    $scope.value=0 
+//    $scope.display=function () {
+//        var x=calculate($scope.name);
+//        $scope.value=x;      
+//    }
+//    function calculate(string) {
+//        var count=0;
+//        for(let i=0;i<string.length;i++)
+//        {
+//            count+=string.charCodeAt(i)
+//        }
+//        return count;
+       
+//    }
+// });
+
+
+
+</script>
 </html>
