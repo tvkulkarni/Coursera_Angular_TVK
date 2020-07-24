@@ -1,0 +1,60 @@
+<html lang="en" ng-app="LunchCheck">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Lunch Checker</title>
+</head>
+<body>
+    <h1>Lunch Checker</h1>
+    <div ng-controller="LunchCheckController" class="maindiv">
+        Enter Dishes: <input type="text" placeholder="List Comma Separated Dishes you usually have for Lunch" ng-model="name" size="50">
+        <br>
+        <p >{{msg}}</p><br>
+        <center><button ng-click="checkitem()">Check If Too Much</button></center>
+    </div>
+</body>
+
+
+<script>
+(function () {
+'use strict'
+var app=angular.module('LunchCheck',[])
+app.controller('LunchCheckController',LunchCheckController);
+LunchCheckController.$inject=["$scope"];
+    function LunchCheckController($scope) 
+    {
+        $scope.name="";
+        $scope.checkitem=function () 
+        {
+            var mystring=$scope.name.split(",");
+            if(mystring.length<=3 && mystring!="")
+            {
+                return $scope.msg="Enjoy!";
+                
+                
+            }
+            else if(mystring.length>3)
+            {
+                return $scope.msg="Too Much!";
+              
+                
+            }
+            else 
+            {
+                return $scope.msg="Please enter data first";
+              
+                
+                           
+            }
+            
+        }
+        
+
+      
+    }
+
+})(); 
+
+</script>
+</html>
