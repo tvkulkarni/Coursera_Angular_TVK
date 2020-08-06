@@ -10,6 +10,8 @@
 <div ng-controller="imgcontrol">
 
 <button ng-click="changejason()">Jason</button> <br>
+Original MSG <p>{{message()}}</p>
+New MSG      <p>{{coolmessage()}}</p>
 <img ng-src="jason_{{mindofjason}}.jpg" width="250" height="250">
 </div>
 
@@ -25,18 +27,38 @@
 
 var app=angular.module('myapp',[])
 app.controller('imgcontrol',imgcontrol);
-imgcontrol.$inject=["$scope"];
+app.filter('cooldude',CoolDudeFilter);
 
-function imgcontrol($scope) {
+imgcontrol.$inject=["$scope","cooldudeFilter"];
+
+function imgcontrol($scope,cooldudeFilter) {
     $scope.mindofjason="happy";    
     
     $scope.changejason=function (){
-        $scope.mindofjason="angry";
-        
+        $scope.mindofjason="angry";        
     };
-    
 
+    $scope.message=function()
+    {
+        var msg="Jason is cool ...!";
+        return msg;
+    };
+    $scope.coolmessage=function()
+    {
+        var msg="Jason is cool...!";
+        msg = cooldudeFilter(msg);
+        return msg;
+    };
 }
+    function CoolDudeFilter()
+    {
+        return function(input)
+        {
+            input = input || "";
+            input = input.replace("cool","cool dude");
+            return input;
+        }
+    }
 })  ();  
 
 

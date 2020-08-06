@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Document</title>
+</head>
+<body ng-app="myapp">
+    <div ng-controller="AddControl as additem">
+        <input type="text" placeholder="Item Name" ng-model="additem.name">
+        <input type="text" placeholder="Item Quantity" ng-model="additem.quantity">
+        <button ng-click="additem.addtolist()">Add to List</button>
+    </div>
+
+    <div ng-controller="ShowControl as showitem">
+        <ol>
+            <li ng-repeat="item in showitem.items">{{item.quantity}} of {{item.name}}
+                <button ng-click="showitem.removeitem($index)">Remove from List</button>
+            </li>
+        </ol>
+    </div>
+</body>
+
+<script>
+
+var app=angular.module('myapp',[]);
+app.controller('AddControl',AddControl);
+app.controller('ShowControl',ShowControl);
+app.service("ShoppingService",ShoppingService);
+
+
+AddControl.$inject = ['ShoppingService'];
+function AddControl(ShoppingService) 
+{
+    var additem=this;
+    additem.name="";
+    additem.quantity="";
+
+    additem.addtolist=function()
+    {
+        ShoppingService.addtolist(additem.name,additem.quantity);
+    }
+}
+
+ShowControl.$inject=['ShoppingService'];
+function ShowControl(ShoppingService) 
+{
+    var showitem=this;
+    showitem.items=ShoppingService.getitem() 
+    
+    showitem.removeitem=function(itemIndex)
+    {
+        ShoppingService.removeitem(itemIndex);
+    }
+}
+function ShoppingService()  
+{
+    var service=this;
+    var items=[];
+    service.addtolist=function(n,q)
+    {   
+        var item=
+        {
+            name:n,
+            quantity:q
+        };  
+        items.push(item);
+    };  
+
+    service.getitem=function()
+    {
+        return items;
+    };
+
+    service.removeitem=function (itemIndex)
+    {
+        items.splice(itemIndex,1);
+    }
+}; 
+</script>
+</html>

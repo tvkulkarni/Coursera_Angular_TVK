@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Shopping List</title>
+
+<style>
+    li
+    {
+        line-height: 30px;
+    }
+</style>
+</head>
+<body ng-app="ShoppingListCheckOff">
+    <h1>Shopping List Check Off</h1>
+    <div ng-controller="ToBuyController as ctrl1">
+        <h2>To Buy List:</h2>
+        <ul>
+            <li ng-repeat="item in ctrl1.items">
+                Buy {{item.quantity}} {{item.name}}
+                <button ng-click="ctrl1.swapitem($index)">Bought</button>
+            </li>
+        </ul>
+        <b style="color: green;" ng-if="ctrl1.items.length==0">Everything is Bought...!</b>
+    </div>
+
+
+    <div ng-controller="AlreadyBoughtController as ctrl2">
+        <h2>Already Bought List:</h2>
+        <div ng-repeat="abc in ctrl2.boughtitems">
+        <ul ng-repeat="xyz in abc">
+            <li>Bought {{xyz.quantity}} {{xyz.name}} </li>
+        </ul>
+    </div>
+        <b style="color:red" ng-if="ctrl2.boughtitems.length==0">Nothing Bought Yet...!</b>
+    
+    </div>
+</body>
+
+
+
+<script>
+    var app=angular.module('ShoppingListCheckOff',[]);
+    app.controller('ToBuyController',ToBuyController );
+    app.controller('AlreadyBoughtController',AlreadyBoughtController);
+    app.service('ShoppingListCheckOffService',ShoppingListCheckOffService);
+
+    ToBuyController.$inject = ['ShoppingListCheckOffService'];
+    function ToBuyController(ShoppingListCheckOffService) 
+    {
+        var ctrl1=this;
+        ctrl1.items=ShoppingListCheckOffService.getitem();
+        
+        ctrl1.swapitem=function(itemIndex)
+        {
+            ShoppingListCheckOffService.swapitem(itemIndex);
+        }
+
+    };
+   
+    AlreadyBoughtController.$inject = ['ShoppingListCheckOffService'];
+    function AlreadyBoughtController(ShoppingListCheckOffService) 
+    {
+        var ctrl2=this;
+        ctrl2.boughtitems=ShoppingListCheckOffService.getbitems();
+        
+    };
+
+    function ShoppingListCheckOffService() 
+    {
+        var service=this;
+        var boughtitems=[];
+        var items=[
+            {
+                name:'Cookies',
+                quantity:10,
+            },
+            {
+                name:"Biscuit",
+                quantity:20,
+            },
+            {
+                name:"Sugary Products",
+                quantity:5,
+            },
+            {
+                name:"Sausages",
+                quantity:2,
+            },
+            {
+                name:"Bread",
+                quantity:15,
+            }
+        ];
+
+        service.getitem=function()
+        {
+            return items;
+        };
+        
+        service.swapitem=function(itemIndex)
+        {
+            boughtitems.push(items.splice(itemIndex,1));           
+            boughtitems.flat(1);
+        };
+        service.getbitems=function()
+        {
+            return boughtitems;
+        }
+        //console.log(items)
+    }   
+
+</script>
+</html>

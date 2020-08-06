@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Document</title>
+</head>
+<body ng-app="myapp">
+    <h1>Counter Controller</h1>
+    <div ng-controller="CounterControl">
+        <button ng-click="upcounter()">Increement Counter</button>
+        <div>
+            Counter:{{counter}}
+        </div>       
+    </div>  
+    
+</body>
+<script>
+var app=angular.module('myapp',[]);
+app.controller("CounterControl",CounterControl);
+CounterControl.$inject=['$scope','$timeout'];
+
+function CounterControl($scope,$timeout) 
+{
+    $scope.counter=0;
+    // $scope.upcounter=function()
+    // {
+    //     setTimeout(function () {
+    //         $scope.$apply(function () 
+    //     {
+    //         $scope.counter++;    
+    //     });    
+    //     },2000)
+    // };
+    $scope.upcounter=function()
+    {
+        $timeout(function () 
+        {
+            $scope.counter++;
+            console.log("Counter Incremented..!");      
+        },2000);
+    };
+
+};
+
+</script>
+</html>
