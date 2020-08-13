@@ -14,9 +14,12 @@
 
     <div ng-controller="ShowControl as showitem">
         <ol>
-            <li ng-repeat="item in showitem.items">{{item.quantity}} of {{item.name}}
+            <!-- <li ng-repeat="item in showitem.items">
+                <item-description></item-description>
                 <button ng-click="showitem.removeitem($index)">Remove from List</button>
-            </li>
+            </li> -->
+             <!-- Dynamic HTML -->
+             <list-item ng-repeat="item in showitem.items"></list-item>
         </ol>
     </div>
 </body>
@@ -26,9 +29,25 @@
 var app=angular.module('myapp',[]);
 app.controller('AddControl',AddControl);
 app.controller('ShowControl',ShowControl);
-app.service("ShoppingService",ShoppingService);
+app.service("ShoppingService",ShoppingService)
+app.directive('itemDescription',ItemDescription);
+app.directive('listItem',ListItem);
 
+function ItemDescription()
+{
+    var ddo={
+        template : "{{item.quantity}} of {{item.name}}"
+    }    
+    return ddo;
+};
 
+function ListItem()
+{
+    var ddo={
+        templateUrl:"listitem.html"
+    };
+    return ddo;
+}
 AddControl.$inject = ['ShoppingService'];
 function AddControl(ShoppingService) 
 {

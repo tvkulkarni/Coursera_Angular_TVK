@@ -1,0 +1,8 @@
+<h4>Name | Short Name | Description</h4>
+<ul>
+    <li ng-repeat="item in narrowctrl.items">
+    {{item.name}} | {{item.short_name}} | {{item.description}}
+        <button ng-click="narrowctrl.onRemove({index:$index});"style="margin:20px" class="btn blue darken-1">Don't Want this One...!</button>
+    </li>
+</ul>
+<center><b ng-if='narrowctrl.nothingFound()' class="red-text">Ohhhh Nothing Found....!</b></center>

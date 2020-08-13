@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narrow Down Your Menu Choice</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
+</head>
+<body ng-app="NarrowItDownApp">
+    <h3>Narrow Down Your Chinese Menu Choice</h3>
+
+    <div ng-controller="NarrowItDownController as narrow">
+        <center>
+        <input type="text" id="itemname" placeholder="Enter Item Name" ng-model="narrow.myitemname" style="width:25%"> 
+        <br>  
+        <button ng-click="narrow.findmyitem()" class="btn blue darken-1">Narrow It Down For Me!</button>
+        </center>
+        <br>
+        <!-- directive displaying list -->
+        <found-items items="narrow.found;" on-remove="narrow.removeItem(index)"></found-items>  
+        
+    </div>
+</body>
+
+
+<script>
+
+var app=angular.module('NarrowItDownApp',[]);
+app.controller("NarrowItDownController",NarrowItDownController);
+app.service("MenuSearchService",MenuSearchService);
+app.directive('foundItems',FoundItemsDirective);
+
+function FoundItemsDirective()
+{
+    var ddo={
+        templateUrl : "founditems.html",
+        scope:
+        {
+            items:'<',
+            onRemove:'&'
+        },
+        controller:RestaurantDirectiveController,
+        controllerAs:"narrowctrl",
+        bindToController:true
+    };
+
+    return ddo;
+};
+
+function RestaurantDirectiveController() 
+{
+    var narrowctrl=this;
+    narrowctrl.nothingFound=function()
+    {
+        if(narrowctrl.items.length==0)
+        {
+            return true;
+        }
+        return false;
+    };    
+}
+
+
+NarrowItDownController.$inject=['MenuSearchService'];
+function NarrowItDownController(MenuSearchService) 
+{   
+    var narrow=this;
+    
+    narrow.found=MenuSearchService.getItems();
+
+    narrow.findmyitem=function()
+    {
+        if(narrow.myitemname=="")
+        {
+            MenuSearchService.clear();
+        }
+        else
+        {
+            MenuSearchService.getMenuItems(narrow.myitemname).then(function (response) 
+            {
+                narrow.found=response;    
+            });
+        }
+    }
+    narrow.removeItem=function(itemIndex)
+    {
+        MenuSearchService.removeItem(itemIndex)
+    };          
+};
+
+
+MenuSearchService.$inject=['$http'];
+function MenuSearchService($http)
+{
+    var service=this;
+    var founditems=[];
+    service.getMenuItems=function(myitemname)
+    {
+        founditems.splice(0,founditems.length);
+        if(myitemname=="")
+        {
+            return founditems;
+        }
+        return $http({
+            method:'GET',
+            url: 'https://davids-restaurant.herokuapp.com/menu_items.json',
+            
+        }).then(function(response){
+            var allitems=response.data.menu_items;
+            founditems.splice(0,founditems.length);
+            
+            for(var i=0;i<allitems.length;i++)
+            {
+                if (allitems[i].description.toLowerCase().indexOf(myitemname.toLowerCase()) !== -1) 
+                {
+                    founditems.push(allitems[i]);
+                }
+            }
+            return founditems
+            
+        })
+        // .catch (function (error) {
+        //    console.log('Got an Error'); 
+        // });
+        
+    };
+
+    service.clear=function () 
+    {
+        founditems.splice(0,founditems.length)    
+    }
+    service.removeItem = function(itemIndex) 
+    {
+        founditems.splice(itemIndex, 1);
+    }; 
+
+    service.getItems=function()
+    {
+        return founditems;
+    }   
+
+
+}
+</script>
+</html>

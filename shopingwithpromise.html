@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+<body ng-app="myapp">
+    <h1>Promise API</h1>
+
+    <div ng-controller="ShopCtrl as list">
+        <input type="text" placeholder="Item Name" ng-model="list.iname">
+        <input type="text" placeholder="Item Quantity" ng-model="list.iquantity">Boxes
+        <br><br>
+        <button ng-clicke="additem()">Add</button>
+
+        <ol>
+            <li><button>Remove</button></li>
+        </ol>
+    </div>
+</body>
+
+<script>
+var app = angular.module('myapp',[]);
+app.controller("ShopCtrl",ShopCtrl);
+app.service("ShopppingService",ShopppingService);
+
+ShopCtrl.$inject=["ShopppingService"];
+function ShopCtrl() 
+{
+    var list=this;
+    list.iname="";
+    list.iquantity="";
+
+    list.additem=function()
+    {
+        ShopppingService.additem(list.iname,list.iquantity);
+    }    
+}
+function ShoppingService()
+{
+    var service=this;
+    var items=[];
+    service.additem(name,quantity)
+    {
+        var promise = WeightLossService.checkname(name);
+        promise.then(function (response) 
+        {
+            var nextpromise=WeightLossService.checkquant(quantity);
+            nextpromise.then(function (result) 
+            {
+                var item={
+                    name:name,
+                    quantity:quantity
+                };
+                item.push(items)   
+            }, function (errorResponse) {
+                console.log(errorResponse,message)
+            })
+        }, function (errorResponse) 
+        {
+            console.log(errorResponse,message)
+
+        })
+    }   
+}
+</script>
+</html>
